@@ -1,0 +1,1 @@
+./waf --run scratch/lpp_first --command-template="%s --numUe=20 --numEnb=1 --pmodel=ns3::FriisPropagationLossModel --time=5 --output=first --lpp=true --udp=true --threeGpp=true --fading=true --RngRun=3" 
