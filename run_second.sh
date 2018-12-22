@@ -1,0 +1,1 @@
+./waf --run scratch/lpp_second --command-template="%s --numUe=100 --numEnb=1 --pmodel=ns3::FriisPropagationLossModel --ns3::LteEnbRrc::SrsPeriodicity=160 --time=200 --distance=1000 --output=first --lpp=true --udp=true --threeGpp=true --fading=true --RngRun=3" 
