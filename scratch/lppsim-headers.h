@@ -90,6 +90,54 @@ setMobility1(NodeContainer ueNodes, NodeContainer enbNodes)
  
 
 }
+//enb in a triangle
+void
+setMobility2(double distance, NodeContainer ueNodes, NodeContainer enbNodes, Box macroUeBox)
+{
+  Ptr<ListPositionAllocator> enbPositionAlloc = CreateObject<ListPositionAllocator> ();
+  enbPositionAlloc->Add (Vector (0.0, 0.0, 0.0));                       // eNB1
+  enbPositionAlloc->Add (Vector (distance,  0.0, 0.0));                 // eNB2
+  enbPositionAlloc->Add (Vector (distance * 0.5, distance * 0.866, 0.0));   // eNB3
+ 
+
+  MobilityHelper mobility;
+  // Install Mobility Model
+  mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
+  mobility.SetPositionAllocator (enbPositionAlloc);
+  mobility.Install (enbNodes);
+
+  mobility.Install (ueNodes);
+  Ptr<MobilityModel> mm0;
+  mm0 = ueNodes.Get (0)->GetObject<ConstantPositionMobilityModel> ();
+  mm0->SetPosition (Vector (distance * 0.5, distance * 0.28867, 0.0));  // edgeUE1
+  mm0 = ueNodes.Get (1)->GetObject<ConstantPositionMobilityModel> ();
+  mm0->SetPosition (Vector (distance * 0.5, distance * 0.28867, 0.0));  // edgeUE2
+  mm0 = ueNodes.Get (2)->GetObject<ConstantPositionMobilityModel> ();
+  mm0->SetPosition (Vector (distance * 0.5, distance * 0.28867, 0.0));  // edgeUE3
+  mm0 = ueNodes.Get (3)->GetObject<ConstantPositionMobilityModel> ();
+  mm0->SetPosition (Vector (0.0, 0.0, 0.0));                                      // centerUE1
+  mm0 = ueNodes.Get (4)->GetObject<ConstantPositionMobilityModel> ();
+  mm0->SetPosition (Vector (distance,  0.0, 0.0));                            // centerUE2
+  mm0 = ueNodes.Get (5)->GetObject<ConstantPositionMobilityModel> ();
+  mm0->SetPosition (Vector (distance * 0.5, distance * 0.866, 0.0));      // centerUE3
+  Ptr<UniformRandomVariable> xVal = CreateObject<UniformRandomVariable> ();
+  Ptr<UniformRandomVariable> yVal = CreateObject<UniformRandomVariable> ();
+  Ptr<UniformRandomVariable> zVal = CreateObject<UniformRandomVariable> ();
+  double xMin = macroUeBox.xMin;
+  double xMax = macroUeBox.xMax;
+  double yMin = macroUeBox.yMin;
+  double yMax = macroUeBox.yMax;
+  double zMin = macroUeBox.zMin;
+  double zMax = macroUeBox.zMax;
+
+  for (uint32_t u = 6; u < ueNodes.GetN(); ++u)
+  {
+      mm0 = ueNodes.Get (u)->GetObject<ConstantPositionMobilityModel> ();
+      mm0->SetPosition (Vector (xVal->GetValue(xMin, xMax), yVal->GetValue(yMin, yMax), zVal->GetValue(zMin, zMax)));
+
+  }
+}
+
 static void
 PlotHttpParams(std::string fname, NodeContainer ueNodes)
 {
