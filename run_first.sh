@@ -1,1 +1,1 @@
-./waf --run scratch/lpp_first --command-template="%s --numUe=20 --numEnb=1 --pmodel=ns3::FriisPropagationLossModel --time=5 --output=first --lpp=true --udp=true --threeGpp=true --fading=true --RngRun=3" 
+./waf --run scratch/lpp_first --command-template="%s --numUe=120 --numEnb=1 --pmodel=ns3::FriisPropagationLossModel --ns3::LteEnbRrc::SrsPeriodicity=160 --time=7200 --output=first --lpp=true --udp=true --threeGpp=true --fading=true --RngRun=3" 
