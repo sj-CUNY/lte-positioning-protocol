@@ -216,6 +216,7 @@ int main (int argc, char *argv[])
     CommandLine cmd;
     ConfigStore inputConfig;
     inputConfig.ConfigureDefaults ();
+    uint16_t run = 0;
 	// parse again so you can override default values from the command line
     cmd.AddValue ("numUe", "number of UEs", numberOfNodes);
     cmd.AddValue ("numEnb", "number of enodeBs", numEnb);
@@ -226,6 +227,7 @@ int main (int argc, char *argv[])
     cmd.AddValue ("udp", "using udp", udp);
     cmd.AddValue ("threeGpp", "using 3gpp", threeGpp);
     cmd.AddValue ("fading", "using fading", fading);
+    cmd.AddValue ("RngRun", "run number", run);
 
 
 
@@ -340,6 +342,8 @@ int main (int argc, char *argv[])
  // p2ph.EnableAsciiAll(ascii.CreateFileStream("lpp-udp.tr"));
 
 
+
+    Simulator::Schedule(Seconds(simTime), &Output, fname+"_" + std::to_string(run), ueNodes);
     Simulator::Schedule(Seconds(simTime), &PlotLppDelay, "lc_delay_plot.pdf", ueNodes);
     Simulator::Schedule(Seconds(simTime), &PlotHttpParams, "http_params_plot.pdf", ueNodes);
     Simulator::Stop(Seconds(simTime+1.0));

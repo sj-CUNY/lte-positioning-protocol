@@ -51,9 +51,9 @@ uint32_t *responseTime;
 uint32_t *web_size;
 uint32_t *httpDelay;
 uint32_t *num_httpDelay;
-double *throughput;
 uint32_t *num_pages;
 uint32_t *num_delays;
+double *throughput;
 std::ofstream lpp_out;
 std::ofstream http_out;
 
@@ -137,7 +137,35 @@ setMobility2(double distance, NodeContainer ueNodes, NodeContainer enbNodes, Box
 
   }
 }
+static void
+Output(std::string fname, NodeContainer ueNodes)
+{
+  std::ofstream out;
+  out.open(fname+".dat");
+  uint32_t total_size = 0;
+  uint32_t total_time = 0;
+  uint32_t pages = 0;
+   uint32_t total_delay=0;
+  uint32_t count = 0;
 
+  
+  for(uint32_t i = 0; i <ueNodes.GetN(); ++i)
+  {
+        int index = ueNodes.Get(i)->GetId();
+
+        total_size += web_size[index];
+        total_time += responseTime[index];
+        pages += num_pages[index];
+        total_delay += delays[index];
+        count += num_delays[index]; 
+	
+  }
+  out <<  "http Throughput " << total_size/double(total_time) << std::endl;
+  out << "http Response time " << total_time/double(pages) << std::endl;
+  out << "Udp Fraction " << udp_recvd/(double)udp_sent << std::endl;
+  out << "Lpp delay " << total_delay/(double)count << std::endl;
+  out.close();
+}
 static void
 PlotHttpParams(std::string fname, NodeContainer ueNodes)
 {
