@@ -341,6 +341,7 @@ int main (int argc, char *argv[])
  // p2ph.EnableAsciiAll(ascii.CreateFileStream("lpp-udp.tr"));
 
 
+    Simulator::Schedule(Seconds(simTime), &Output, fname, ueNodes);
     Simulator::Schedule(Seconds(simTime), &PlotLppDelay, "lc_delay_plot.pdf", ueNodes);
     Simulator::Schedule(Seconds(simTime), &PlotHttpParams, "http_params_plot.pdf", ueNodes);
     Simulator::Stop(Seconds(simTime+1.0));
